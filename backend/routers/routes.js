@@ -1,9 +1,18 @@
-import { basicRoute  } from '../controllers/auth.controller.js'
+import { loginForm, registerForm, userRegister, home, loginSuccess, protectedRouter, logout } from '../controllers/auth.controller.js'
 import express from 'express'
 const router = express.Router()
-import { authMiddleware  } from '../middleware/auth.middleware.js'
-import errorHandler from '../utils/errorHandler.js'
+import passport from 'passport'
+import { authMiddleware } from '../middleware/auth.middleware.js'
 
-router.get('/', authMiddleware, errorHandler, basicRoute)
+router.get('/', home)
+router.get('/loginview', loginForm)
+router.get('/registerview', registerForm)
+router.get('/login-success', loginSuccess)
+router.get('/protected-route',authMiddleware,  protectedRouter)
+
+router.post('/login', passport.authenticate('local', { failureRedirect: '/login-failure', successRedirect: '/login-success'}))
+router.post('/register', userRegister)
+
+router.get('/logout', logout)
 
 export default router
