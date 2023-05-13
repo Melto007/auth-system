@@ -7,6 +7,8 @@ import config from './config/index.js'
 import strategy from './services/passport.js'
 import passport from 'passport'
 
+import JwtStratagy from './services/passportConfig.js'
+
 const sessionStore = new MongoStore({
     mongoUrl: config.MONGODB,
     collection: 'sessions'
@@ -26,8 +28,10 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 passport.use(strategy)
+passport.use(JwtStratagy)
 
 app.use(passport.initialize())
+
 app.use(passport.session())
 
 app.use(router)
